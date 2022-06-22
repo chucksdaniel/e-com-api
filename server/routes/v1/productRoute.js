@@ -1,46 +1,39 @@
 const express = require("express");
 const router = express.Router();
 
+const auth = require("../../middleware/auth");
+const productController = require("../../controllers/productContoller");
+
 /**
  *  @route      GET api/v1/users/login
  *  @desc       Get logged in user
  *  @access     Private
  */
-router.get("/", (req, res) => {
-	res.send("Welcome to Product Route");
-});
+router.get("/", productController.getAllProducts);
 /**
  *  @route      POST api/v1/products/
  *  @desc       Create a new product
  *  @access     Public
  */
-router.get("/:productId", (req, res) => {
-	res.send("Get a particular Product");
-});
+router.get("/:productId", productController.getProduct);
 
 /**
  *  @route      POST api/v1/products/
  *  @desc       Create a new product
  *  @access     Private
  */
-router.post("/", (req, res) => {
-	res.send("Create a new Product Route");
-});
+router.post("/", auth, productController.createProduct);
 /**
  *  @route      PUT api/v1/products/:productId
  *  @desc       Edit a particular product by product owner
  *  @access     Private
  */
-router.put("/:productId", (req, res) => {
-	res.send("Edit a partular Product Route");
-});
+router.put("/:productId", auth, productController.editProduct);
 /**
  *  @route      DELETE api/v1/products/:productId
  *  @desc       Delete a particular product by product owner
  *  @access     Private
  */
-router.delete("/:productId", (req, res) => {
-	res.send("Edit a partular Product Route");
-});
+router.delete("/:productId", auth, productController.deleteProduct);
 
 module.exports = router;

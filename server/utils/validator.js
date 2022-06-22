@@ -40,10 +40,11 @@ const validateLogin = async (user) => {
 
 const validateProductSchema = Joi.object({
 	name: Joi.string().alphanum().min(5).max(30).required(),
-	description: Joi.string().required(),
-	category: Joi.string().required(),
+	description: Joi.string().max(100).required(),
+	category: Joi.string().max(30).required(),
 	price: Joi.number().required(),
 	quantity: Joi.string().required(),
+	brand: Joi.string(),
 });
 
 const validateProduct = async (product) => {
