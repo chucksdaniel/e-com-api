@@ -1,7 +1,6 @@
 const express = require("express");
 
-const userRoute = require("./routes/v1/userRoute");
-const productRoute = require("./routes/v1/productRoute");
+const indexRouter = require("./src/v1/index.router");
 const connectDB = require("./database/db");
 
 connectDB();
@@ -9,8 +8,8 @@ connectDB();
 const app = express();
 
 app.use(express.json({ extended: false }));
-app.use("/api/v1/users", userRoute);
-app.use("/api/v1/products", productRoute);
+
+app.use("/api/v1/", indexRouter);
 
 /** Error handling Middleware */
 app.use((req, res, next) => {

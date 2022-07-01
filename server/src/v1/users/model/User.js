@@ -11,6 +11,10 @@ const UserSchema = new Schema(
 			type: String,
 			default: "customer",
 		},
+		// isAdmin: {
+		// 	type: Boolean,
+		// 	default: false,
+		// },
 	},
 	{ timestamps: true }
 );

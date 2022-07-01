@@ -1,7 +1,9 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
-const UserModel = require("../models/User");
+const UserModel = require("../../v1/users/model/User");
+
+const createError = require("../utils/errors");
 
 dotenv.config();
 
@@ -51,7 +53,7 @@ exports.findByEmail = async (email) => {
 };
 
 exports.findById = async (id) => {
-	const user = await UserModel.findById({ id });
+	const user = await UserModel.findById(id).select("-password -__v");
 	return user;
 };
 
@@ -72,6 +74,22 @@ exports.signToken = (payload) => {
 
 exports.validateToken = (token) => {
 	return jwt.verify(token, process.env.JWT_SECRET);
+};
+
+exports.getToken = (req) => {
+	//Bearer token
+	const authToken = req.get("authorization");
+
+	// const authHeader = req.headers.token
+
+	if (!authToken) {
+		// throw new Error("Auth Token is missing");
+		throw createError(403, "No Token, authorization denied!");
+	}
+
+	const token = authToken.split(" ")[1];
+
+	return token;
 };
 
 // var token = jwt.sign({email:'sivamanismca@gmail.com',role:'User'}, "Secret", {});
