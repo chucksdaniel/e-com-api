@@ -1,4 +1,4 @@
-const helper = require("../utils/helper");
+const helper = require("../utils/user.helper");
 const createError = require("../utils/errors");
 
 /**
@@ -7,7 +7,7 @@ const createError = require("../utils/errors");
  */
 
 const getToken = (req) => {
-	const authToken = req.headers.authorization;
+	const authToken = req.headers.authorization || req.headers.Authorization;
 	if (!authToken) {
 		// throw new Error("No Token, authorization denied!");
 		throw createError(401, "No Token, authorization denied!");
@@ -28,9 +28,10 @@ const auth = (req, res, next) => {
 	}
 };
 
+/** Middleware for a user to view or edit his profile */
 const isAuthorized = (req, res, next) => {
 	auth(req, res, () => {
-		if (req.user.id === req.params.id) {
+		if (req.user.id === req.params.id || req.user.role === "admin") {
 			next();
 		} else {
 			res.status(403).json({
@@ -40,9 +41,10 @@ const isAuthorized = (req, res, next) => {
 	});
 };
 
-const isSeller = (req, res, next) => {
+/** Only vendor are authenticated on this middleware */
+const isVendor = (req, res, next) => {
 	auth(req, res, () => {
-		if (req.user.id === req.params.id && req.user.role === "seller") {
+		if (req.user.id === req.params.id && req.user.role === "vendor") {
 			next();
 		} else {
 			res.status(403).json({
@@ -51,6 +53,8 @@ const isSeller = (req, res, next) => {
 		}
 	});
 };
+
+//customer
 
 const isAdmin = (req, res, next) => {
 	auth(req, res, () => {
@@ -67,6 +71,6 @@ const isAdmin = (req, res, next) => {
 module.exports = {
 	auth,
 	isAuthorized,
-	isSeller,
+	isVendor,
 	isAdmin,
 };

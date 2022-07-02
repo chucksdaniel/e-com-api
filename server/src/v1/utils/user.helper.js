@@ -1,11 +1,15 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
-const UserModel = require("../../v1/users/model/User");
+const UserModel = require("../users/model/User");
 
-const createError = require("../utils/errors");
+const createError = require("./errors");
 
 dotenv.config();
+
+exports.getAllUser = async () => {
+	return UserModel.find();
+};
 
 exports.create = async ({ name, username, password, email }) => {
 	const newUser = new UserModel({
@@ -19,6 +23,7 @@ exports.create = async ({ name, username, password, email }) => {
 	const payload = {
 		user: {
 			id: user.id,
+			role: user.role,
 		},
 	};
 
@@ -92,4 +97,26 @@ exports.getToken = (req) => {
 	return token;
 };
 
-// var token = jwt.sign({email:'sivamanismca@gmail.com',role:'User'}, "Secret", {});
+/** Vendors */
+
+exports.createVendor = async ({ name, username, password, email, role }) => {
+	const newUser = new UserModel({
+		name,
+		username,
+		password,
+		email: email.toLowerCase(),
+		role,
+	});
+	const user = await newUser.save();
+
+	const payload = {
+		user: {
+			id: user.id,
+			role: user.role,
+		},
+	};
+
+	const token = this.signToken(payload);
+
+	return token;
+};

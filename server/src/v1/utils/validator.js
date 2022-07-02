@@ -5,6 +5,7 @@ const validateUserSchema = Joi.object({
 	name: Joi.string().min(10).max(100),
 	username: Joi.string().alphanum().min(5).max(30).required(),
 	password: Joi.string().required(),
+	role: Joi.string(),
 	email: Joi.string()
 		.email({
 			minDomainSegments: 2,

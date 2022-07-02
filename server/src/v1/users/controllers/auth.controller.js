@@ -1,5 +1,5 @@
 const validator = require("../../utils/validator");
-const userHelper = require("../../utils/helper");
+const userHelper = require("../../utils/user.helper");
 
 const createError = require("../../utils/errors");
 // const { use } = require("../routes/auth.route");
@@ -70,6 +70,7 @@ exports.loginUser = async (req, res, next) => {
 		const payload = {
 			user: {
 				id: userExist.id,
+				role: userExist.role,
 			},
 		};
 
@@ -97,3 +98,5 @@ exports.getUser = async (req, res, next) => {
 		next(error);
 	}
 };
+
+/** Vendors special routes for signing up */
